@@ -13,6 +13,7 @@ import urllib.request
 
 from . import i18n
 from .i18n import LocalizedError
+from .net import ssl_context
 from .model import Graph, Lane, STATUSES
 
 API_URL = "https://api.anthropic.com/v1/messages"
@@ -107,7 +108,7 @@ def call_claude(system: str, user: str, api_key: str, model: str, timeout: float
         "content-type": "application/json",
     })
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:
+        with urllib.request.urlopen(req, timeout=timeout, context=ssl_context()) as r:
             out = json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", "replace")[:300]

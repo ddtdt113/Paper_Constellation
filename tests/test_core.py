@@ -166,3 +166,11 @@ def test_example_has_english():
     assert g.title_en and g.summary_en
     assert all(n.note_en for n in g.nodes) and all(e.solves_en for e in g.edges)
     assert all(l.name_en for l in g.lanes)
+
+
+def test_https_uses_a_ca_bundle():
+    import ssl
+    from paper_constellation.net import ssl_context
+    ctx = ssl_context()
+    assert isinstance(ctx, ssl.SSLContext) and ctx.verify_mode == ssl.CERT_REQUIRED
+    assert ctx.cert_store_stats()["x509_ca"] > 0

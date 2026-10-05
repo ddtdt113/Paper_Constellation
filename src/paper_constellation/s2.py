@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from .i18n import LocalizedError
+from .net import ssl_context
 
 BASE = "https://api.semanticscholar.org/graph/v1"
 PAPER_FIELDS = ("paperId,externalIds,title,abstract,year,publicationDate,venue,authors,"
@@ -78,7 +79,7 @@ class SemanticScholar:
             self._last = time.monotonic()
             req = urllib.request.Request(url, data=data, headers=headers, method=method)
             try:
-                with urllib.request.urlopen(req, timeout=self.timeout) as r:
+                with urllib.request.urlopen(req, timeout=self.timeout, context=ssl_context()) as r:
                     out = json.loads(r.read().decode("utf-8"))
                 break
             except urllib.error.HTTPError as e:

@@ -329,6 +329,9 @@ def main(argv: list[str] | None = None) -> int:
         # used by packaging/build.py: the bundled app starts, finds its data and draws the example
         app.processEvents()
         ok = bool(w.graph and w.graph.nodes and w.view.stars)
+        # HTTPS needs a CA bundle inside the frozen app (see net.ssl_context)
+        from ..net import ssl_context
+        ok = ok and ssl_context().cert_store_stats()["x509_ca"] > 0
         w.close()
         return 0 if ok else 1
     args = argv[1:]
