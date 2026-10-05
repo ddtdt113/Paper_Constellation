@@ -20,8 +20,8 @@ classifiers = [
 dependencies = ["PySide6>=6.6"]
 
 [project.urls]
-Homepage = "https://github.com/ddtdt113/Papers_Constellation"
-Issues = "https://github.com/ddtdt113/Papers_Constellation/issues"
+Homepage = "https://github.com/ddtdt113/Paper_Constellation"
+Issues = "https://github.com/ddtdt113/Paper_Constellation/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]

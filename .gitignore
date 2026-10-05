@@ -8,3 +8,4 @@ dist/
 .pytest_cache/
 .DS_Store
 *.constellation.json
+*.spec

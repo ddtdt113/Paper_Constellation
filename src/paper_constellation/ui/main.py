@@ -315,13 +315,23 @@ class MainWindow(QMainWindow):
 
 
 def main(argv: list[str] | None = None) -> int:
-    app = QApplication(argv if argv is not None else sys.argv)
+    argv = list(argv if argv is not None else sys.argv)
+    self_test = "--self-test" in argv
+    if self_test:
+        argv.remove("--self-test")
+    app = QApplication(argv)
     app.setApplicationName("Paper Constellation")
     app.setOrganizationName(ORG)
     app.setStyleSheet(theme.STYLESHEET)
     w = MainWindow()
     w.show()
-    args = (argv if argv is not None else sys.argv)[1:]
+    if self_test:
+        # used by packaging/build.py: the bundled app starts, finds its data and draws the example
+        app.processEvents()
+        ok = bool(w.graph and w.graph.nodes and w.view.stars)
+        w.close()
+        return 0 if ok else 1
+    args = argv[1:]
     if args:
         w.search.setText(args[0])
         w.run_search()

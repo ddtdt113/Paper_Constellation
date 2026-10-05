@@ -46,13 +46,22 @@ NeRF  ──(replaces slow ray marching with sorted rasterisation)──▶  3D 
 - **English and Korean interface**: the **한국어 / English** button at the top right (or **View → language**, `Ctrl/Cmd+L`) switches every menu, message and panel instantly, keeping the current zoom and selection. The choice is remembered; on first launch the app follows the system language. The curated example ships with text in both languages, and the LLM writes its explanations in the language that is active when you draw.
 - **Curated example included**: a Gaussian Splatting constellation with 53 papers and 69 annotated links opens on first launch.
 
-### Installation
+### Download
+
+Ready-to-run apps for **macOS (Apple Silicon)**, **Windows** and **Linux** are on the
+[Releases page](https://github.com/ddtdt113/Paper_Constellation/releases/latest). No Python needed.
+
+- **macOS**: unzip and open *Paper Constellation.app*. The app is not code-signed, so the first time right-click it and choose **Open** (or run `xattr -dr com.apple.quarantine "Paper Constellation.app"`).
+- **Windows**: unzip and run *Paper Constellation.exe* in the *Paper Constellation* folder. If SmartScreen warns, choose **More info → Run anyway**.
+- **Linux**: extract and run *Paper Constellation/Paper Constellation*. Needs the usual Qt desktop libraries (`libegl1`, `libxkbcommon-x11-0`, `libxcb-cursor0` on Debian/Ubuntu).
+
+### Installation from source
 
 Requirements: Python 3.9 or newer, pip 21.3 or newer (needed for editable installs).
 
 ```bash
-git clone https://github.com/ddtdt113/Papers_Constellation.git
-cd Papers_Constellation
+git clone https://github.com/ddtdt113/Paper_Constellation.git
+cd Paper_Constellation
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 python -m pip install --upgrade pip
@@ -139,6 +148,18 @@ pytest                                   # runs offline against tests/fake_sourc
 PC_LANG=en QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=2 python docs/capture_preview.py   # regenerate docs/preview-en.png (ko: docs/preview.png)
 ```
 
+### Building the apps
+
+`packaging/build.py` builds a one-folder app with PyInstaller and archives it with the licenses:
+
+```bash
+pip install . pyinstaller
+python packaging/build.py          # dist/PaperConstellation-<version>-<OS>-<arch>.zip / .tar.gz
+python packaging/build.py --smoke  # start the built app with --self-test
+```
+
+Releases are automatic: pushing a tag such as `v0.1.0` runs `.github/workflows/release.yml`, which tests, builds and smoke-tests on macOS, Windows and Linux and attaches the three archives to a GitHub Release.
+
 ### Limitations
 
 - Citation data comes from Semantic Scholar. Very recent papers may not have citation data yet.
@@ -152,7 +173,7 @@ In short, you may use, modify and redistribute the code, including commercially,
 
 Third-party components and data:
 
-- **PySide6 / Qt for Python** is a dependency installed from PyPI and is licensed under the **LGPL v3** (or a commercial Qt license). It is not bundled in this repository. If you distribute a frozen app that bundles PySide6, follow the LGPL's requirements.
+- **PySide6 / Qt for Python** is licensed under the **LGPL v3** (or a commercial Qt license). The source repository does not include it. The release apps bundle it as replaceable shared libraries (one-folder build) and ship the LGPL-3.0 and GPL-3.0 texts next to the app.
 - **Citation data** is retrieved at run time from the [Semantic Scholar API](https://www.semanticscholar.org/product/api) (Allen Institute for AI) and is subject to its API license terms. Please keep the attribution.
 - **LLM output** is generated through the Anthropic API under your own account and is subject to Anthropic's terms.
 - **Bundled example** (`gaussian-splatting.json`): paper titles, authors and dates are bibliographic facts. The selection of papers, the links, and the explanatory notes are original work distributed under Apache-2.0 with this repository.
@@ -197,13 +218,22 @@ NeRF  ──(느린 광선 행진 렌더링을 정렬 래스터화로 대체)─
 - **한국어 / 영어 화면 전환**: 오른쪽 위의 **English / 한국어** 버튼(또는 **보기 → 언어**, `Ctrl/Cmd+L`)으로 메뉴, 메시지, 패널이 바로 바뀌고 확대 배율과 선택은 그대로 유지됩니다. 고른 언어는 기억되고, 처음 실행할 때는 시스템 언어를 따릅니다. 큐레이션 예제는 두 언어 설명을 모두 담고 있고, LLM 설명은 성도를 그릴 때 선택된 언어로 작성됩니다.
 - **큐레이션 예제 포함**: 처음 열면 별 53개, 설명 달린 연결 69개짜리 Gaussian Splatting 성도가 뜹니다.
 
-### 설치
+### 다운로드
+
+Python 없이 바로 실행되는 **macOS(Apple Silicon)**, **Windows**, **Linux** 앱을
+[Releases 페이지](https://github.com/ddtdt113/Paper_Constellation/releases/latest)에서 받을 수 있습니다.
+
+- **macOS**: 압축을 풀고 *Paper Constellation.app*을 엽니다. 코드 서명이 없는 앱이라 처음에는 앱을 오른쪽 클릭 → **열기**를 누르세요(또는 `xattr -dr com.apple.quarantine "Paper Constellation.app"`).
+- **Windows**: 압축을 풀고 *Paper Constellation* 폴더의 *Paper Constellation.exe*를 실행합니다. SmartScreen 경고가 뜨면 **추가 정보 → 실행**을 누르세요.
+- **Linux**: 압축을 풀고 *Paper Constellation/Paper Constellation*을 실행합니다. Qt 데스크톱 라이브러리(Debian/Ubuntu 기준 `libegl1`, `libxkbcommon-x11-0`, `libxcb-cursor0`)가 필요합니다.
+
+### 소스에서 설치
 
 필요한 것: Python 3.9 이상, pip 21.3 이상(편집 가능 설치에 필요).
 
 ```bash
-git clone https://github.com/ddtdt113/Papers_Constellation.git
-cd Papers_Constellation
+git clone https://github.com/ddtdt113/Paper_Constellation.git
+cd Paper_Constellation
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 python -m pip install --upgrade pip
@@ -290,6 +320,18 @@ pytest                                   # tests/fake_source.py로 네트워크 
 PC_LANG=ko QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=2 python docs/capture_preview.py   # docs/preview.png 다시 만들기 (en: docs/preview-en.png)
 ```
 
+### 앱 빌드
+
+`packaging/build.py`가 PyInstaller로 폴더형 앱을 만들고 라이선스 파일과 함께 압축합니다.
+
+```bash
+pip install . pyinstaller
+python packaging/build.py          # dist/PaperConstellation-<버전>-<OS>-<아키텍처>.zip / .tar.gz
+python packaging/build.py --smoke  # 빌드된 앱을 --self-test로 실행해 확인
+```
+
+릴리스는 자동입니다. `v0.1.0` 같은 태그를 push하면 `.github/workflows/release.yml`이 macOS, Windows, Linux에서 테스트, 빌드, 실행 확인을 거쳐 세 압축 파일을 GitHub Release에 올립니다.
+
 ### 한계
 
 - 인용 데이터는 Semantic Scholar에 의존합니다. 아주 최근 논문은 인용 정보가 아직 없을 수 있습니다.
@@ -303,7 +345,7 @@ Paper Constellation은 **Apache License 2.0**으로 배포됩니다. [LICENSE](L
 
 외부 구성 요소와 데이터:
 
-- **PySide6 / Qt for Python**은 PyPI에서 설치되는 의존성이며 **LGPL v3**(또는 Qt 상용 라이선스)를 따릅니다. 이 저장소에 포함되어 있지 않습니다. PySide6를 묶어서 단일 실행 파일로 배포한다면 LGPL 조건을 지켜야 합니다.
+- **PySide6 / Qt for Python**은 **LGPL v3**(또는 Qt 상용 라이선스)를 따릅니다. 소스 저장소에는 포함되어 있지 않고, 릴리스 앱에는 교체 가능한 공유 라이브러리(폴더형 빌드)로 포함되며 LGPL-3.0, GPL-3.0 전문이 앱 옆에 함께 들어갑니다.
 - **인용 데이터**는 실행할 때 [Semantic Scholar API](https://www.semanticscholar.org/product/api)(Allen Institute for AI)에서 가져오며, 그 API 라이선스 조건을 따릅니다. 출처 표기를 유지해 주세요.
 - **LLM 출력**은 사용자 본인 계정의 Anthropic API로 생성되며 Anthropic 약관을 따릅니다.
 - **번들 예제**(`gaussian-splatting.json`): 논문 제목·저자·날짜는 서지 정보입니다. 논문 선정, 연결, 설명 문구는 이 저장소와 함께 Apache-2.0으로 배포되는 창작물입니다.
