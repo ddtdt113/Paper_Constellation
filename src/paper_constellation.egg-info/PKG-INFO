@@ -1,0 +1,134 @@
+Metadata-Version: 2.4
+Name: paper-constellation
+Version: 0.1.0
+Summary: See where a paper came from and where it went, drawn as a star chart.
+Author: 정범기
+License: Apache-2.0
+Keywords: research,citation,lineage,arxiv,semantic-scholar,pyside6
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Classifier: Environment :: X11 Applications :: Qt
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: PySide6>=6.6
+Provides-Extra: dev
+Requires-Dist: pytest>=7; extra == "dev"
+Dynamic: license-file
+
+# Paper Constellation
+
+**논문 한 편을 넣으면, 그 논문이 어디서 왔고 어디로 가고 있는지를 별자리로 그려 주는 데스크톱 앱.**
+
+논문을 읽다 보면 이런 질문이 생깁니다.
+
+- 이 논문은 어떤 문제를 풀려고 나왔지? 그 전에는 뭐가 있었지?
+- 그래서 이후에 어떻게 발전되고 있는데?
+- 지금도 활발한 흐름이야, 아니면 이미 다른 방법으로 대체됐어?
+
+인용 그래프 도구는 이미 많지만, 대부분 "누가 누구를 인용했나"를 수백 개의 점으로 보여 줍니다.
+Paper Constellation은 **방법론적으로 직접 이어진 논문만** 골라 시간축 위에 놓고,
+연결선마다 **"무엇을 해결했나"** 를 적어 둡니다.
+
+```
+NeRF ──(느린 광선 행진 렌더링을 정렬 래스터화로 대체)──▶ 3D Gaussian Splatting
+3DGS ──(3D 타원체의 다시점 깊이 불일치로 기하가 부정확)──▶ 2D Gaussian Splatting
+```
+
+## 화면
+
+![Paper Constellation: 2D Gaussian Splatting을 선택한 모습](docs/screenshot.png)
+
+- **가로축은 시간**입니다. 왼쪽이 과거(선행 연구), 오른쪽이 미래(후속 연구)입니다.
+- **세로는 연구 갈래**입니다. LLM을 쓰면 갈래 이름이 붙고, 안 쓰면 선행/중심/후속으로 나뉩니다.
+- **별을 누르면** 그 논문이 딛고 선 계보는 주황색으로, 그 논문에서 뻗어 나간 계보는 하늘색으로 이어집니다.
+  오른쪽 패널에는 요약, 상태(기반 · 활발 · 대체됨 · 최신), 선행/후속 논문과 각 연결의 설명이 나옵니다.
+- **별을 두 번 누르면** 그 논문을 중심으로 새 성도를 그립니다.
+- 중심 논문에는 **반기별 인용 흐름**과 "가속 중 / 꾸준함 / 둔화" 판정이 붙습니다.
+
+처음 열면 직접 큐레이션한 **Gaussian Splatting 성도**(별 53개, 설명 달린 연결 69개)가 예제로 열립니다.
+
+## 설치와 실행
+
+Python 3.9 이상, pip 21.3 이상이 필요합니다 (편집 가능 설치 `-e`에 필요). pip이 오래됐다면 먼저 `python -m pip install --upgrade pip`을 실행하세요.
+
+```bash
+git clone https://github.com/<you>/paper-constellation.git
+cd paper-constellation
+python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -e .
+paper-constellation                                   # 또는: python -m paper_constellation
+```
+
+검색창에 다음 중 아무거나 넣고 Enter를 누르세요.
+
+| 입력 | 예 |
+|---|---|
+| arXiv 주소·ID | `https://arxiv.org/abs/2308.04079`, `2308.04079`, alphaxiv 주소 |
+| DOI | `10.1145/3592433`, `https://doi.org/...`, ACM 논문 페이지 |
+| Semantic Scholar 주소 | `https://www.semanticscholar.org/paper/...` |
+| OpenReview · ACL Anthology | `https://openreview.net/forum?id=...` |
+| 논문 제목 | `Attention Is All You Need` |
+
+명령줄에서 바로 열 수도 있습니다: `paper-constellation https://arxiv.org/abs/2212.09748`
+
+## 어떻게 고르나
+
+1. [Semantic Scholar](https://www.semanticscholar.org/product/api)에서 중심 논문의 참고문헌과 인용 논문을 가져옵니다.
+2. 영향력 있는 인용(`isInfluential`), 방법론 인용(`intents: methodology`), 인용 문맥 수, 인용 수로 점수를 매겨
+   선행 12편, 후속 16편을 고르고, 상위 몇 편은 한 단계 더 거슬러 올라가거나 내려갑니다.
+3. 고른 논문들 사이의 인용 관계를 모두 확인하고, 더 긴 경로로 이미 이어진 연결은 지웁니다(중심 논문의 연결은 유지).
+4. **(선택) LLM 단계**: Anthropic API 키가 있으면 Claude가 초록과 인용 문장을 읽고
+   - 데이터셋·도구처럼 지나가듯 인용된 논문을 빼고,
+   - 연결마다 "해결한 문제"를 한 줄로 쓰고,
+   - 연구 갈래로 묶고, 각 논문의 상태와 중심 논문의 현재 위치를 요약합니다.
+
+키가 없어도 1~3단계만으로 성도는 그려집니다.
+
+## 설정
+
+메뉴 **설정 → API 키와 모델**에서 넣거나 환경변수를 씁니다.
+
+| 항목 | 환경변수 | 필요 여부 |
+|---|---|---|
+| Semantic Scholar API 키 | `S2_API_KEY` | 선택. 없으면 공용 한도로 동작하며, 혼잡할 때 느려질 수 있습니다. [키 신청](https://www.semanticscholar.org/product/api#api-key-form) |
+| Anthropic API 키 | `ANTHROPIC_API_KEY` | 선택. "해결한 문제" 설명과 갈래 묶기에 필요 |
+| 모델 | `PC_MODEL` | 기본값 `claude-sonnet-5-5` |
+
+설정 창에 넣은 키는 이 컴퓨터의 앱 설정 파일(QSettings)에 평문으로 저장됩니다.
+API 응답은 `~/.cache/paper-constellation/`에 7일간 캐시됩니다.
+
+## 성도 파일 형식
+
+**파일 → 성도 저장**은 JSON 한 개로 저장합니다(`schema: "paper-constellation/1"`).
+`nodes`(논문), `edges`(`src` = 먼저 나온 논문, `dst` = 그 위에 쌓은 논문, `solves` = 해결한 문제), `lanes`(갈래)로 이루어져 있어
+손으로 고치거나 다른 도구에서 만들기 쉽습니다. 예시는 `src/paper_constellation/examples/gaussian-splatting.json`.
+
+## 기여하기
+
+이 도구의 가치는 연결선의 정확도에서 나옵니다. 특히 환영하는 기여:
+
+- **큐레이션한 성도 추가**: 잘 아는 분야의 성도를 만들어 `examples/`에 PR로 보내 주세요(Diffusion, LLM, 강화학습, 물리 시뮬레이션…).
+- **틀린 연결 고치기**: 예제 성도의 `solves` 설명이나 연결이 틀렸다면 이슈나 PR로 알려 주세요.
+- **데이터 소스**: OpenAlex 등 다른 인용 데이터 소스 지원 (`s2.PaperSource` 프로토콜을 구현하면 됩니다).
+
+개발 환경:
+
+```bash
+pip install -e ".[dev]"
+pytest
+```
+
+테스트는 네트워크 없이 `tests/fake_source.py`의 가짜 인용 데이터로 돕니다.
+
+## 한계
+
+- 인용 데이터는 Semantic Scholar에 의존합니다. 아주 최근 논문은 인용 정보가 아직 비어 있을 수 있습니다.
+- "대체됨" 같은 상태 판정과 "해결한 문제" 설명은 LLM이 초록을 읽고 내린 판단이라 틀릴 수 있습니다. 출발점으로 쓰고, 원문으로 확인하세요.
+
+## 라이선스
+
+Apache License 2.0. [LICENSE](LICENSE)를 보세요.
+인용 데이터는 [Semantic Scholar](https://www.semanticscholar.org/)(Allen Institute for AI)가 제공합니다.

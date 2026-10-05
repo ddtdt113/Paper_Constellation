@@ -1,0 +1,12 @@
+Paper Constellation
+Copyright 2026 정범기 and Paper Constellation contributors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product depends on, but does not include:
+  - PySide6 / Qt for Python (The Qt Company), licensed under LGPL-3.0 or a commercial license.
+
+At run time this product retrieves bibliographic and citation data from the
+Semantic Scholar API (Allen Institute for AI), subject to the Semantic Scholar
+API license terms, and may send paper metadata to the Anthropic API when the
+user supplies an API key.
