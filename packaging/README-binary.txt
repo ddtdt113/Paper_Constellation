@@ -3,8 +3,9 @@ https://github.com/ddtdt113/Paper_Constellation
 
 == English ==
 Run
-  macOS:   open "Paper Constellation.app". The app is not signed, so the first time
-           right-click it and choose Open, or run:
+  macOS:   open "Paper Constellation.app". The app is not notarized, so the first launch
+           is blocked. Click Done, then System Settings -> Privacy & Security ->
+           "Open Anyway". Or run once in Terminal:
            xattr -dr com.apple.quarantine "Paper Constellation.app"
   Windows: open the "Paper Constellation" folder and run "Paper Constellation.exe".
            If SmartScreen warns, choose More info -> Run anyway.
@@ -19,8 +20,9 @@ Licenses
 
 == 한국어 ==
 실행
-  macOS:   "Paper Constellation.app"을 엽니다. 서명되지 않은 앱이라 처음에는 앱을
-           오른쪽 클릭 → 열기를 누르거나, 터미널에서 다음을 실행하세요.
+  macOS:   "Paper Constellation.app"을 엽니다. 공증받지 않은 앱이라 처음 실행이 막히면
+           완료를 누르고 시스템 설정 → 개인정보 보호 및 보안 → "그래도 열기"를 누르거나,
+           터미널에서 한 번 실행하세요.
            xattr -dr com.apple.quarantine "Paper Constellation.app"
   Windows: "Paper Constellation" 폴더의 "Paper Constellation.exe"를 실행합니다.
            SmartScreen 경고가 뜨면 추가 정보 → 실행을 누르세요.

@@ -51,7 +51,7 @@ NeRF  ──(replaces slow ray marching with sorted rasterisation)──▶  3D 
 Ready-to-run apps for **macOS (Apple Silicon)**, **Windows** and **Linux** are on the
 [Releases page](https://github.com/ddtdt113/Paper_Constellation/releases/latest). No Python needed.
 
-- **macOS**: unzip and open *Paper Constellation.app*. The app is not code-signed, so the first time right-click it and choose **Open** (or run `xattr -dr com.apple.quarantine "Paper Constellation.app"`).
+- **macOS**: unzip and open *Paper Constellation.app*. The app is not notarized by Apple, so macOS blocks the first launch ("Apple could not verify…"). Click **Done** (not *Move to Trash*), then open **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to *Paper Constellation*. Or run once in Terminal: `xattr -dr com.apple.quarantine "/path/to/Paper Constellation.app"`.
 - **Windows**: unzip and run *Paper Constellation.exe* in the *Paper Constellation* folder. If SmartScreen warns, choose **More info → Run anyway**.
 - **Linux**: extract and run *Paper Constellation/Paper Constellation*. Needs the usual Qt desktop libraries (`libegl1`, `libxkbcommon-x11-0`, `libxcb-cursor0` on Debian/Ubuntu).
 
@@ -223,7 +223,7 @@ NeRF  ──(느린 광선 행진 렌더링을 정렬 래스터화로 대체)─
 Python 없이 바로 실행되는 **macOS(Apple Silicon)**, **Windows**, **Linux** 앱을
 [Releases 페이지](https://github.com/ddtdt113/Paper_Constellation/releases/latest)에서 받을 수 있습니다.
 
-- **macOS**: 압축을 풀고 *Paper Constellation.app*을 엽니다. 코드 서명이 없는 앱이라 처음에는 앱을 오른쪽 클릭 → **열기**를 누르세요(또는 `xattr -dr com.apple.quarantine "Paper Constellation.app"`).
+- **macOS**: 압축을 풀고 *Paper Constellation.app*을 엽니다. Apple 공증을 받지 않은 앱이라 처음 실행 때 "Apple은 … 확인할 수 없습니다" 창이 뜹니다. **완료**를 누른 뒤(휴지통으로 이동 X) **시스템 설정 → 개인정보 보호 및 보안**에서 아래로 내려 *Paper Constellation* 옆의 **그래도 열기**를 누르세요. 또는 터미널에서 한 번 실행: `xattr -dr com.apple.quarantine "/경로/Paper Constellation.app"`.
 - **Windows**: 압축을 풀고 *Paper Constellation* 폴더의 *Paper Constellation.exe*를 실행합니다. SmartScreen 경고가 뜨면 **추가 정보 → 실행**을 누르세요.
 - **Linux**: 압축을 풀고 *Paper Constellation/Paper Constellation*을 실행합니다. Qt 데스크톱 라이브러리(Debian/Ubuntu 기준 `libegl1`, `libxkbcommon-x11-0`, `libxcb-cursor0`)가 필요합니다.
 
