@@ -50,8 +50,8 @@ NeRF  ──(replaces slow ray marching with sorted rasterisation)──▶  3D 
 Requirements: Python 3.9 or newer, pip 21.3 or newer (needed for editable installs).
 
 ```bash
-git clone https://github.com/<you>/paper-constellation.git
-cd paper-constellation
+git clone https://github.com/ddtdt113/Papers_Constellation.git
+cd Papers_Constellation
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 python -m pip install --upgrade pip
@@ -201,8 +201,8 @@ NeRF  ──(느린 광선 행진 렌더링을 정렬 래스터화로 대체)─
 필요한 것: Python 3.9 이상, pip 21.3 이상(편집 가능 설치에 필요).
 
 ```bash
-git clone https://github.com/<you>/paper-constellation.git
-cd paper-constellation
+git clone https://github.com/ddtdt113/Papers_Constellation.git
+cd Papers_Constellation
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 python -m pip install --upgrade pip

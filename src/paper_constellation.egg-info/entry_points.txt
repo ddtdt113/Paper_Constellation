@@ -1,2 +1,0 @@
-[gui_scripts]
-paper-constellation = paper_constellation.ui.main:main
