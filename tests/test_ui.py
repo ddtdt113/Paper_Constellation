@@ -29,6 +29,14 @@ def test_window_opens_with_example(app, tmp_path):
     states = {i: s.state for i, s in w.view.stars.items()}
     assert states["2dgs"] == "selected" and states["3dgs"] == "anc" and states["pgsr"] == "desc"
     assert states["dreamgaussian"] == "dim"
+    # notes on the map for a star with few links, none for a hub
+    notes = {(a, b) for a, b, e in w.view.edges if e.note is not None and e.note.isVisible()}
+    assert ("3dgs", "2dgs") in notes or ("sugar", "2dgs") in notes
+    w.view.select("3dgs")
+    app.processEvents()
+    assert not any(e.note is not None and e.note.isVisible() for _, _, e in w.view.edges)
+    w.view.select("2dgs")
+    app.processEvents()
     shot = os.environ.get("PC_SCREENSHOT")
     if shot:
         w.grab().save(shot)

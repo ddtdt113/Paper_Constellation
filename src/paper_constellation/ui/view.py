@@ -163,6 +163,7 @@ class ConstellationView(QGraphicsView):
     zoomChanged = Signal(float)   # zoom relative to "fit all", 1.0 = 100%
 
     MIN_ZOOM, MAX_ZOOM = 0.25, 12.0
+    MAX_NOTES = 8   # show "what it solved" on the map only for stars with at most this many links
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -406,6 +407,9 @@ class ConstellationView(QGraphicsView):
             self.cleared.emit()
             return
         up, down = self.graph.lineage(self.selected)
+        # a hub paper (3DGS itself) has dozens of links: label them in the panel, not on the map
+        adjacent = sum(1 for a, b, _ in self.edges if self.selected in (a, b))
+        notes_on = adjacent <= self.MAX_NOTES
         for i, s in self.stars.items():
             s.set_state("selected" if i == self.selected else "anc" if i in up else "desc" if i in down else "dim")
         for a, b, e in self.edges:
@@ -415,7 +419,7 @@ class ConstellationView(QGraphicsView):
                 st = "desc"
             else:
                 st = "dim"
-            e.set_state(st, show_note=self.selected in (a, b))
+            e.set_state(st, show_note=notes_on and self.selected in (a, b))
         self._declutter()
         self.nodeSelected.emit(self.selected)
 
